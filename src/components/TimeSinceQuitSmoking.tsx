@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 
 const TimeSinceQuitSmoking: React.FC = () => {
     // 🔧 תאריך הפסקת עישון (שנה לפי הצורך)
-    const quitDate = new Date("2025-10-15T20:00:00+03:00");
+    const quitDate = new Date("2025-10-17T18:10:00+03:00");
 
     const [timePassed, setTimePassed] = useState({
         days: 0,
@@ -49,7 +49,7 @@ const TimeSinceQuitSmoking: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7 }}
             >
-                עברו מאז שהפסקת לעשן:
+                יוני, עברו מאז שהתחלת לעשן:
             </motion.h1>
 
             <motion.div
