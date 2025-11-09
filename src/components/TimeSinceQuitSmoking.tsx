@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
 const TimeSinceQuitSmoking: React.FC = () => {
-    // 🔧 תאריך הפסקת עישון (שנה לפי הצורך)
-    const quitDate = new Date("2025-10-17T18:10:00+03:00");
+    // תאריך הפסקת עישון (מתעדכן גם בעת איפוס)
+    const [quitDate, setQuitDate] = useState(new Date("2025-10-17T18:10:00+03:00"));
 
     const [timePassed, setTimePassed] = useState({
         days: 0,
@@ -13,6 +13,7 @@ const TimeSinceQuitSmoking: React.FC = () => {
     });
 
     const [message, setMessage] = useState("");
+    const [showPopup, setShowPopup] = useState(false);
 
     useEffect(() => {
         const updateTime = () => {
@@ -30,7 +31,7 @@ const TimeSinceQuitSmoking: React.FC = () => {
             else if (days < 14) setMessage("אתה כבר שבוע שלם לא מעשן - כל הכבוד!👏");
             else if (days < 30) setMessage("כבר עברו כמה שבועות – הגוף שלך מתחיל להתנקות 👃");
             else if (days < 60) setMessage("מעל חודש! הגוף שלך כבר נושם טוב יותר 🫁");
-            else if (days < 180) setMessage(" כמה חודשים זה כבר זמן משמעותי!🔥");
+            else if (days < 180) setMessage("כמה חודשים זה כבר זמן משמעותי!🔥");
             else if (days < 365) setMessage("למעלה מחצי שנה בלי עישון – זה כבר אורח חיים חדש 🌿");
             else if (days < 730) setMessage("איזה הישג! כבר למעלה משנה בלי סיגריות ❤️");
             else setMessage("עברו למעלה משנתיים מאז שהפסקת לעשן – אתה השראה לאחרים 🌟");
@@ -40,6 +41,13 @@ const TimeSinceQuitSmoking: React.FC = () => {
         const interval = setInterval(updateTime, 1000);
         return () => clearInterval(interval);
     }, [quitDate]);
+
+    const handleReset = () => setShowPopup(true);
+
+    const confirmReset = () => {
+        setQuitDate(new Date());
+        setShowPopup(false);
+    };
 
     return (
         <div style={styles.container}>
@@ -73,14 +81,29 @@ const TimeSinceQuitSmoking: React.FC = () => {
             >
                 {message}
             </motion.div>
+
+            <button onClick={handleReset} style={styles.resetButton}>איפוס הטיימר</button>
+
+            {showPopup && (
+                <div style={styles.popupBackdrop}>
+                    <motion.div
+                        style={styles.popup}
+                        initial={{ scale: 0.8, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                    >
+                        <p>האם אתה בטוח שברצונך לאפס את הטיימר לעכשיו?</p>
+                        <div style={styles.popupButtons}>
+                            <button onClick={confirmReset} style={styles.confirmBtn}>כן</button>
+                            <button onClick={() => setShowPopup(false)} style={styles.cancelBtn}>לא</button>
+                        </div>
+                    </motion.div>
+                </div>
+            )}
         </div>
     );
 };
 
-const TimeUnit: React.FC<{ value: number; label: string }> = ({
-    value,
-    label,
-}) => (
+const TimeUnit: React.FC<{ value: number; label: string }> = ({ value, label }) => (
     <motion.div
         style={styles.unit}
         whileHover={{ scale: 1.1 }}
@@ -135,6 +158,58 @@ const styles: Record<string, React.CSSProperties> = {
         fontSize: "1.2rem",
         fontWeight: 500,
         color: "#2c3e50",
+    },
+    resetButton: {
+        marginTop: "1rem",
+        padding: "0.7rem 1.4rem",
+        fontSize: "1rem",
+        background: "#d35400",
+        color: "white",
+        border: "none",
+        borderRadius: "10px",
+        cursor: "pointer",
+    },
+    popupBackdrop: {
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100vw",
+        height: "100vh",
+        background: "rgba(0,0,0,0.4)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        zIndex: 1000,
+    },
+    popup: {
+        background: "white",
+        padding: "1.5rem",
+        borderRadius: "12px",
+        boxShadow: "0 4px 10px rgba(0,0,0,0.2)",
+        textAlign: "center",
+        width: "300px",
+        fontFamily: "Rubik, sans-serif",
+    },
+    popupButtons: {
+        display: "flex",
+        justifyContent: "space-around",
+        marginTop: "1rem",
+    },
+    confirmBtn: {
+        background: "#27ae60",
+        color: "white",
+        border: "none",
+        padding: "0.6rem 1.2rem",
+        borderRadius: "8px",
+        cursor: "pointer",
+    },
+    cancelBtn: {
+        background: "#c0392b",
+        color: "white",
+        border: "none",
+        padding: "0.6rem 1.2rem",
+        borderRadius: "8px",
+        cursor: "pointer",
     },
 };
 
