@@ -3,7 +3,10 @@ import { motion } from "framer-motion";
 
 const TimeSinceQuitSmoking: React.FC = () => {
     // תאריך הפסקת עישון (מתעדכן גם בעת איפוס)
-    const [quitDate, setQuitDate] = useState(new Date("2025-10-17T18:10:00+03:00"));
+    const [quitDate, setQuitDate] = useState(() => {
+        const saved = localStorage.getItem("quitDate");
+        return saved ? new Date(saved) : new Date("2025-10-17T18:10:00+03:00");
+    });
 
     const [timePassed, setTimePassed] = useState({
         days: 0,
@@ -45,7 +48,9 @@ const TimeSinceQuitSmoking: React.FC = () => {
     const handleReset = () => setShowPopup(true);
 
     const confirmReset = () => {
-        setQuitDate(new Date());
+        const now = new Date();
+        setQuitDate(now);
+        localStorage.setItem("quitDate", now.toISOString());
         setShowPopup(false);
     };
 
