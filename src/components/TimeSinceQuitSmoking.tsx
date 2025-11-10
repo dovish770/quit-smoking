@@ -62,7 +62,7 @@ const TimeSinceQuitSmoking: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7 }}
             >
-                יוני, עברו מאז שהתחלת לעשן:
+                יוני, עברו מאז שהפסקת לעשן:
             </motion.h1>
 
             <motion.div
@@ -134,6 +134,7 @@ const styles: Record<string, React.CSSProperties> = {
         marginBottom: "1.5rem",
         fontSize: "1.8rem",
         color: "#333",
+        direction: "rtl"
     },
     timer: {
         display: "flex",
@@ -194,11 +195,13 @@ const styles: Record<string, React.CSSProperties> = {
         textAlign: "center",
         width: "300px",
         fontFamily: "Rubik, sans-serif",
+        direction: "rtl"
     },
     popupButtons: {
         display: "flex",
         justifyContent: "space-around",
         marginTop: "1rem",
+        direction: "ltr"
     },
     confirmBtn: {
         background: "#27ae60",
